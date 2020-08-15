@@ -2,12 +2,16 @@ package com.example.handsfreereader
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.folioreader.Config
+import com.folioreader.FolioReader
 
 class MainActivity : AppCompatActivity() {
 
-    var array = arrayOf("Melbourne", "Vienna", "Vancouver", "Toronto", "Calgary", "Adelaide", "Perth", "Auckland", "Helsinki", "Hamburg", "Munich", "New York", "Sydney", "Paris", "Cape Town", "Barcelona", "London", "Bangkok")
+    var array = arrayOf("E-book")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,7 +19,23 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = ArrayAdapter(this, R.layout.listview_ebook_item, array)
 
-        val listView:ListView = findViewById(R.id.ebook_list_view)
-        listView.adapter = adapter
+        val ebookListView:ListView = findViewById(R.id.ebook_list_view)
+        ebookListView.adapter = adapter
+
+        ebookListView.onItemClickListener = object : AdapterView.OnItemClickListener {
+
+            override fun onItemClick(p0: AdapterView<*>?, view: View, position: Int, id: Long) {
+
+                val itemValue = ebookListView.getItemAtPosition(position)
+
+                val config:Config = Config()
+                    .setAllowedDirection(Config.AllowedDirection.ONLY_HORIZONTAL)
+                    .setDirection(Config.Direction.HORIZONTAL)
+                var folioReader:FolioReader = FolioReader.get()
+                    .setConfig(config, true)
+
+                folioReader.openBook("")
+            }
+        }
     }
 }
