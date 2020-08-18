@@ -6,8 +6,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import com.folioreader.Config
 import com.folioreader.FolioReader
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +31,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onItemClick(p0: AdapterView<*>?, view: View, position: Int, id: Long) {
 
+                // Real-time contour detection
+                val realTimeOpts = FaceDetectorOptions.Builder()
+                    .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
+                    .build()
+
+                val faceDetector = FaceDetection.getClient()
+
                 val itemValue = ebookListView.getItemAtPosition(position)
 
                 val config:Config = Config()
@@ -34,8 +46,14 @@ class MainActivity : AppCompatActivity() {
                 var folioReader:FolioReader = FolioReader.get()
                     .setConfig(config, true)
 
-                folioReader.openBook("")
+                folioReader.openBook("/mnt/sdcard/Download/adventures.epub")
             }
         }
     }
+    inner class ImageProcessor : ImageAnalysis.Analyzer {
+        private val TAG = javaClass.simpleName
+        override fun analyze(imageProxy: ImageProxy) {
+            val mediaImage = imageProxy.image
+            }
+        }
 }
