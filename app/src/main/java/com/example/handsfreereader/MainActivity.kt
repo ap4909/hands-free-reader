@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                     .build()
 
                 val faceDetector = FaceDetection.getClient()
-
+                
                 val itemValue = ebookListView.getItemAtPosition(position)
 
                 val config:Config = Config()
@@ -76,6 +76,14 @@ class MainActivity : AppCompatActivity() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
+    inner class ImageProcessor : ImageAnalysis.Analyzer {
+        private val TAG = javaClass.simpleName
+        override fun analyze(imageProxy: ImageProxy) {
+            val mediaImage = imageProxy.image
+
+        }
+    }
+
 
     private fun takePhoto() {}
 
@@ -143,10 +151,4 @@ class MainActivity : AppCompatActivity() {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
-    inner class ImageProcessor : ImageAnalysis.Analyzer {
-        private val TAG = javaClass.simpleName
-        override fun analyze(imageProxy: ImageProxy) {
-            val mediaImage = imageProxy.image
-            }
-        }
 }
